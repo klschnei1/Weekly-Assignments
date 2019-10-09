@@ -1,0 +1,7 @@
+These are the commands used:  
+gdown.pl https://drive.google.com/file/d/1PWWO5wVRRThLBXXEZjyWZHIb9udVcnCS/edit CP_R1.fastq
+gdown.pl https://drive.google.com/file/d/1mZFvpSIctuBihkOlQX9vhrkxng3cRmvK/edit CP_R2.fastq
+ [klschnei@colossus wafour]$ efetch -db sequences -id CP000141.1 -format fasta>OG1.fasta
+[klschnei@colossus wafour]$ bowtie2-build OG1.fasta C.hydro
+[klschnei@colossus wafour]$ bowtie2 -x C.hydro -1 CP_R1.fastq -2 CP_R2.fastq -S result1.sam
+74.52% of the genome aligned and 25.48 did not align!
