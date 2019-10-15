@@ -1,0 +1,15 @@
+cd /scratch_30_day_tmp/klschnei/
+
+gdown.pl https://drive.google.com/file/d/1CbOF6-EY94qxbj7WFtseCGLwF2M9Suqz/edit D23_S12_L001_R1_001.fastq.gz 
+gdown.pl https://drive.google.com/file/d/1DP9-X5VbrEHbd4UWwDlhx79G72YVvDip/edit D23_S12_L001_R2_001.fastq.gz
+
+cutadapt -q 20,20 -a CTGTCTCTTATACACATCTCCGAGCCCACGAGAC -A CTGTCTCTTATACACATCTGACGCTGCCGACGA -m 50 --max-n 0 -o D23_S12_L001_R1_001.cutadapt.fastq -p D23_S12_L001_R2_001.cutadapt.fastq D23_S12_L001_R1_001.fastq.gz D23_S12_L001_R2_001.fastq.gz
+D23_S12_L001_R2_001.fastq.gz
+D23_S12_L001_R1_001.fastq.gz
+
+conda activate de_novo
+spades.py -k 21,51,71,91,111,127 --careful --pe1-1 D23_S12_L001_R1_001.cutadapt.fastq --pe1-2 D23_S12_L001_R2_001.cutadapt.fastq -o D23_Spades_output
+
+cd D23_spades_output
+quast.py contigs.fasta
+report file downloaded off of winSCP
