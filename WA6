@@ -1,0 +1,15 @@
+PuTTY COMMANDS:
+cd scratch
+mkdir wasix
+cd wasix
+
+wget https://github.com/stechtmann/BL4300-5300/raw/master/data/Weekly_Assignment_data/Unk_therm.faa
+makeblastdb -in Unk_therm.faa -dbtype prot -title Unknown_Loki
+wget https://github.com/stechtmann/BL4300-5300/raw/master/data/Weekly_Assignment_data/HSP_prot.fasta
+blastp -db Unk_therm.faa -query HSP_prot.fasta -out HSP_BLAST.txt -outfmt 7
+less HSP_BLAST.txt
+
+1.) I speculate from the search results that there are 4 HSPs.
+2.) I have concluded this because there are 4 matches with E values below 10^-30 and bit scores above 100
+3.) I specualte that there are 6 paralogs.
+4.) This speculation is based off the presence of 6 matches with E-values below 10^-4 and bit scores above 40
