@@ -1,0 +1,24 @@
+efetch -db=nucleotide -id=NC_008535.1 -format=gb>coffee.gbk
+// obtaining genbank file for coffee chloroplast
+python genbank_to_fasta.py coffee.gbk coffee.fasta
+// converting genbank file to fasta 
+grep -c "^>" coffee.fasta
+// Determining number of sequences 
+// RESULT: 85 sequences
+ grep -oP '\[\K[^\]]+' coffee.fasta > names1.txt
+ // searching for the names (i.e. the content between square brackets)
+ // and writing these names to a text file titled "names1.txt"
+ grep -c 'photosystem' names1.txt
+ // counting the number of photosystem subunits
+ // RESULT: 22 subunits
+ grep -h 'ATP synthase CF1 beta subunit' coffee.fasta
+ // find the lines for this protein sequence
+ sed -n '57,58p;59q' coffee.fasta>ATPsub.fasta
+ // export the lines for that protein to another fasta file
+ 
+ 
+ Determine the number of protein sequences in the chloroplast.
+    RESULT: 85 sequences
+Create a file of all of the names of protein sequences in Coffee plant's chloroplast sequences.
+How many photosystem subunits are present in the chromosome?
+Make a .fasta file with the sequences for ATP synthase CF1 beta subunit protein sequence.
