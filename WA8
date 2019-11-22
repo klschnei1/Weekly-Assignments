@@ -1,0 +1,68 @@
+Code from RStudio:
+install.packages("readr")
+install.packages("tidyverse")
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+BiocManager::install("DESeq2")
+library(readr)
+library(tidyverse)
+library(DESeq2)
+mycounts <- read_csv("WA_counts.csv") 
+metadata <- read_csv("WA8_metadata.csv")
+head(mycounts)
+head(metadata)
+mycounts <- as.data.frame(mycounts)
+metadata <- as.data.frame(metadata)
+names(mycounts)[-1]
+metadata$id
+names(mycounts)[-1]==metadata$id
+all(names(mycounts)[-1]==metadata$id)
+dds.data <- DESeqDataSetFromMatrix(countData=mycounts, 
+                                   colData=metadata, 
+                                   design=~dex, 
+                                   tidy=TRUE)
+dds <- DESeq(dds.data)
+res <- results(dds, tidy=TRUE)
+res <- tbl_df(res)
+res2 <- arrange(res, padj)
+
+ggplot(res)+
+  geom_point(aes(x=log2FoldChange, y=padj))
+view(res)
+count(res[[8]],vars="Significant")
+ggplot(res) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=significance)) +
+  ggtitle("Significant vs Nonsignificant DEGs") +
+  xlab("log2 fold change") + 
+  ylab("-log10 adjusted p-value") +
+  #scale_y_continuous(limits = c(0,50)) +
+  theme(legend.position = "none",
+        plot.title = element_text(size = rel(1.5), hjust = 0.5),
+        axis.title = element_text(size = rel(1.25)))  +
+  theme_bw()
+view(res2)
+
+counts<- counts(dds, normalized = TRUE)
+
+dds2.data <- DESeqDataSetFromMatrix(countData=counts, 
+                                    colData=metadata, 
+                                    design=~dex, 
+                                    tidy=TRUE)
+dds2 <- DESeq(dds2.data)
+
+res3 <- filter(res2, padj<=0.05 & log2FoldChange>=2)
+res4 <- filter(res2, padj<=0.05 & log2FoldChange<=-2)
+
+RESULTS:
+How many genes are significantly differentially expressed?
+8,904
+How many genes are significantly differentially expressed in the Control versus the Mutant?
+1,489
+How many genes are significantly differentially expressed in the Mutant versus the Control?
+941
+What gene is the most highly expressed gene in the Mutant versus the Control?
+Solyc11g028040.1.1
+What gene is the most highly expressed gene in the Control versus the Mutant?
+Solyc09g089500.2.1
+
+
+
